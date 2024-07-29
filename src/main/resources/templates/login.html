@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container">
+    <h2 class="form-signin-heading">Login with OAuth 2.0</h2>
+    <table class="table table-striped">
+        <tr>
+            <td><button id="login-kakao">Login with Kakao</button></td>
+        </tr>
+        <tr>
+            <td><button id="login-google">Login with Google</button></td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    // 로그인 요청을 보내고 JWT 토큰을 저장하는 함수
+    function login(provider) {
+        // OAuth2 로그인 페이지로 리디렉션
+        window.location.href = `/oauth2/authorization/${provider}`;
+    }
+
+    // 로그인 버튼 클릭 시 호출되는 함수
+    document.getElementById('login-kakao').addEventListener('click', () => login('kakao'));
+    document.getElementById('login-google').addEventListener('click', () => login('google'));
+</script>
+</body>
+</html>

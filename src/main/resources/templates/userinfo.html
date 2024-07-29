@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Info</title>
+    <script>
+        function saveUser() {
+            const name = document.getElementById('name').value;
+            const universityId = document.getElementById('universityId').value;
+
+            if (!name || !universityId) {
+                alert('Name and University ID are required.');
+                return;
+            }
+
+            fetch('/users/', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: 'user@example.com', // 로그인 상태에서 가져온 사용자 이메일
+                    name: name,
+                    universityId: universityId
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        return Promise.reject('Failed to update user');
+                    }
+                })
+                .then(text => {
+                    alert('User updated successfully: ' + text);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred');
+                });
+        }
+    </script>
+</head>
+<body>
+<h1>Update User Info</h1>
+<form onsubmit="event.preventDefault(); saveUser();">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
+    <br>
+    <label for="universityId">University ID:</label>
+    <input type="text" id="universityId" name="universityId">
+    <br>
+    <button type="submit">Update</button>
+</form>
+</body>
+</html>
+
