@@ -21,17 +21,9 @@ public class UserService {
 
 
 
-    public void saveUser(String email, String name, String universityId) {
-        // Convert universityId to Long
-        Long universityIdLong;
-        try {
-            universityIdLong = Long.parseLong(universityId);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid university ID");
-        }
-
+    public void saveUser(String email, String name, Long universityId) {
         // Validate the universityId
-        List<Universities> universities = universityService.searchUniversitiesById(universityIdLong);
+        List<Universities> universities = universityService.searchUniversitiesById(universityId);
         if (universities.isEmpty()) {
             throw new IllegalArgumentException("University not found");
         }
@@ -39,7 +31,7 @@ public class UserService {
         User user = new User();
         user.setEmail(email);
         user.setName(name);
-        user.setUniversityId(universityIdLong);
+        user.setUniversityId(universityId);
 
         userRepository.save(user);
     }

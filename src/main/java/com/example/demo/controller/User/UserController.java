@@ -40,6 +40,6 @@ public class UserController {
 
     @PostMapping("/register")
     public void registerUser(@RequestParam String email, @RequestParam String name, @RequestParam Long universityId) {
-        userService.saveUser(email, name, universityId.toString());
+        userService.saveUser(email, name, universityId);
     }
 }
