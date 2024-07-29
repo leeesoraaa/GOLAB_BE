@@ -22,11 +22,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users/")
-    public String userInfoForm(Model model) {
-        // 사용자 정보를 입력받는 폼을 반환
-        return "userinfo";
-    }
+//    @GetMapping("/users/")
+//    public String userInfoForm(Model model) {
+//        // 사용자 정보를 입력받는 폼을 반환
+//        return "userinfo";
+//    }
 
 //    @PutMapping("/users/")
 //    public ResponseEntity<String> saveUser(@RequestBody UserUpdateRequest request) {
