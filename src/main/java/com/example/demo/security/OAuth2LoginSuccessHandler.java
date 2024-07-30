@@ -5,6 +5,7 @@ import com.example.demo.domain.user.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -22,6 +23,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @Value("${frontend.url}")
+    private String frontendUrl;
+
     public OAuth2LoginSuccessHandler(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -36,13 +40,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String email = null;
         String nickname = null;
-        
 
         if (token.getAuthorizedClientRegistrationId().equals("kakao")) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
             email = (String) kakaoAccount.get("email");
-            nickname = (String) profile.get("nickname"); // 카카오의 경우
+            nickname = (String) profile.get("nickname");
         }
 
         if (email != null && nickname != null) {
@@ -56,6 +59,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         String jwtToken = jwtTokenProvider.createToken(authentication);
-        response.sendRedirect( "http://localhost:3000/authkakao"+ "?accessToken=" + jwtToken);
+        String redirectUrl = frontendUrl + "/authkakao?accessToken=" + jwtToken;
+        System.out.println("Redirecting to: " + redirectUrl);  // 로그 추가
+        response.sendRedirect(redirectUrl);
     }
 }
