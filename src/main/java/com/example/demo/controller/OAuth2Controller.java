@@ -26,15 +26,4 @@ public class OAuth2Controller {
         return "Authorization code: " + code + ", JWT: " + jwtToken;
     }
 
-    @GetMapping("/oauth2/callback/google")
-    public String handleGoogleCallback(@RequestParam("code") String code) {
-        // 여기서 액세스 토큰을 가져오는 코드를 구현해야 합니다.
-        // 예: String accessToken = getAccessTokenFromCode(code);
-
-        // JWT 생성
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String jwtToken = jwtTokenProvider.createToken(authentication);
-
-        return "Authorization code: " + code + ", JWT: " + jwtToken;
-    }
 }
