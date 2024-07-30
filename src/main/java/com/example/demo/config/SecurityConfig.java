@@ -34,15 +34,10 @@ public class SecurityConfig {
                                 .requestMatchers("/", "/login", "/oauth2/**", "/user/**").permitAll()
                                 .anyRequest().permitAll()
                 )
-//                .formLogin(formLogin ->
-//                        formLogin
-//                                .loginPage("/login")
-//                                .permitAll()
-//                )
-//                .formLogin().disable()
+//
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-//                                .loginPage("/login")
+//
                                 .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .logout(logout ->
