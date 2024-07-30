@@ -18,7 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UniversityRepository universityRepository;
 
-    public void updateUser(String nickname, UserRequestDto userRequestDto) {
+    public void updateUser(String nickname, String email, UserRequestDto userRequestDto) {
 
         if (userRepository.countByName(nickname) > 0) {
             //UPDATE
@@ -33,7 +33,7 @@ public class UserService {
 
             User user = User.builder()
                     .name(userRequestDto.getName())
-                    .email("AUSTINAN")
+                    .email(email)
                     .nickname(nickname)
                     .universities(universities).build();
 

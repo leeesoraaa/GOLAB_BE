@@ -61,6 +61,12 @@ public class JwtTokenProvider {
     }
 
     public String getNickName(String token) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return claims.get("nickname", String.class);
+    }
+
+    public String getEmail(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return claims.get("email", String.class);
     }
 }

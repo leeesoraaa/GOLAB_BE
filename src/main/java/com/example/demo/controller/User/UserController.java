@@ -20,7 +20,8 @@ public class UserController {
                                       @RequestBody UserRequestDto userRequest) {
 
         String nickname = jwtTokenProvider.getNickName(accessToken);
-        userService.updateUser(nickname, userRequest);
+        String email = jwtTokenProvider.getEmail(accessToken);
+        userService.updateUser(nickname, email, userRequest);
 
         return ResponseEntity.ok("저장되었습니다.");
 
