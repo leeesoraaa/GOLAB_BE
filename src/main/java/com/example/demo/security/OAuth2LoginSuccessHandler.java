@@ -36,6 +36,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String email = null;
         String nickname = null;
+        
 
         if (token.getAuthorizedClientRegistrationId().equals("kakao")) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
