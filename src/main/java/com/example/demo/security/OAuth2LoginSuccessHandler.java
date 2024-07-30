@@ -5,6 +5,7 @@ import com.example.demo.domain.user.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -44,7 +45,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         if (email != null && nickname != null) {
-            Optional<User> existingUser = userRepository.findByEmail(email);
+            Optional<User> existingUser = Optional.ofNullable(userRepository.findByEmail(email));
             if (existingUser.isEmpty()) {
                 User newUser = new User();
                 newUser.setEmail(email);
@@ -54,9 +55,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         }
 
         String jwtToken = jwtTokenProvider.createToken(authentication);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"token\": \"" + jwtToken + "\"}");
-        response.sendRedirect("http://43.203.223.215:3000");
+        response.sendRedirect( "http://localhost:3000/authkakao"+ "?accessToken=" + jwtToken);
     }
 }
