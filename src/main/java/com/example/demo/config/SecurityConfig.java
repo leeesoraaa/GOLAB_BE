@@ -32,16 +32,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/", "/login", "/oauth2/**", "/user/**").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
-                .formLogin(formLogin ->
-                        formLogin
-                                .loginPage("/login")
-                                .permitAll()
-                )
+//                .formLogin(formLogin ->
+//                        formLogin
+//                                .loginPage("/login")
+//                                .permitAll()
+//                )
+//                .formLogin().disable()
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-                                .loginPage("/login")
+//                                .loginPage("/login")
                                 .successHandler(oAuth2LoginSuccessHandler)
                 )
                 .logout(logout ->
