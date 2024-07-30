@@ -1,8 +1,16 @@
 package com.example.demo.domain.user;
 
+import com.example.demo.domain.university.Universities;
+import com.example.demo.dto.user.UserRequestDto;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,45 +21,24 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
     private String name;
-    private Long universityId;
 
-    public String getName() {
-        return name;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "university_id")
+    private Universities universities;
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Long getUniversityId() {
-        return universityId;
-    }
-
-    public void setUniversityId(Long universityId) {
-        this.universityId = universityId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+    public void updateEmail(String email) {
         this.email = email;
+    }
+
+    public void updateUser(UserRequestDto userRequestDto) {
+        this.name = userRequestDto.getName();
+        updateUniversity(userRequestDto.getUniversityId());
+    }
+
+    private void updateUniversity(Long universityId) {
+        if (this.universities == null) {
+            this.universities = new Universities();
+        }
+        this.universities.setUniversityId(universityId);
     }
 }

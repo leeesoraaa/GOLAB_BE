@@ -38,6 +38,7 @@ public class JwtTokenProvider {
         }
 
         Claims claims = Jwts.claims().setSubject(username);
+//        Claims claims = Jwts.claims().setSubject(email);
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -59,7 +60,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public String getUsername(String token) {
+    public String getNickName(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
     }
 }

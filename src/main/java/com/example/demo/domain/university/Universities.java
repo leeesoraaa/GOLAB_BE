@@ -1,33 +1,25 @@
 package com.example.demo.domain.university;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
 
+import com.example.demo.domain.user.User;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.logging.log4j.util.Lazy;
+
+@Setter
+@Getter
 @Entity
 public class Universities {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long university_id;
+    @Column(name = "university_id")
+    private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    public Long getUniversity_id() {
-        return university_id;
-    }
-
-    public void setUniversity_id(Long university_id) {
-        this.university_id = university_id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setUniversityId(Long universityId) {
+        this.id = universityId;
     }
     // Getters and Setters
 }
