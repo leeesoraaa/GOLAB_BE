@@ -8,14 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/saveUser")
+    @PostMapping()
     public ResponseEntity<String> saveUser(@RequestHeader String accessToken,
                                       @RequestBody UserRequestDto userRequest) {
 
