@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -19,19 +21,22 @@ public class PostService {
     private final UserRepository userRepository;
     private final UniversityRepository universityRepository;
 
-    public Posts createPost(Long user_id, PostRequestDto postRequestDto) {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new RuntimeException("User not found"));
+    public Posts createPost(String nickname, PostRequestDto postRequestDto) {
+        System.out.println("Nickname: " + nickname); // 닉네임 디버깅 출력
+        User user = userRepository.findByName(nickname);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
 
         Universities university = universityRepository.findById(postRequestDto.getUniversityId())
                 .orElseThrow(() -> new RuntimeException("University not found"));
+
         Posts post = Posts.builder()
-                .universities(university) // Assuming you have a constructor or method to create Universities
+                .universities(university)
                 .user(user)
                 .title(postRequestDto.getTitle())
                 .location_latitude(postRequestDto.getLocationLatitude())
                 .location_longitude(postRequestDto.getLocationLongitude())
-//                .created_at(postRequestDto.getCreated_At())
-//                .updated_at(postRequestDto.getUpdated_At())
                 .isuntact(postRequestDto.isUntact())
                 .duration(postRequestDto.getDuration())
                 .istrade(postRequestDto.isTrade())
@@ -46,5 +51,55 @@ public class PostService {
                 .build();
 
         return postRepository.save(post);
+    }
+
+    public Posts updatePost(Long postId, String nickname, PostRequestDto postRequestDto) {
+        Posts post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        if (!post.getUser().getNickname().equals(nickname)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        Universities university = universityRepository.findById(postRequestDto.getUniversityId())
+                .orElseThrow(() -> new RuntimeException("University not found"));
+
+        post.setUniversities(university);
+        post.setTitle(postRequestDto.getTitle());
+        post.setLocation_latitude(postRequestDto.getLocationLatitude());
+        post.setLocation_longitude(postRequestDto.getLocationLongitude());
+        post.setUntact(postRequestDto.isUntact());
+        post.setDuration(postRequestDto.getDuration());
+        post.setTrade(postRequestDto.isTrade());
+        post.setReward(postRequestDto.getReward());
+        post.setRequirements(postRequestDto.getRequirements());
+        post.setContactlink(postRequestDto.getContactLink());
+        post.setEtc(postRequestDto.getEtc());
+        post.setStatus(postRequestDto.getStatus());
+        post.setSurveylink(postRequestDto.getSurveyLink());
+        post.setStartdate(postRequestDto.getStartdate());
+        post.setEnddate(postRequestDto.getEnddate());
+
+        return postRepository.save(post);
+    }
+
+    public Posts getPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+    }
+
+    public List<Posts> getAllPosts() {
+        return postRepository.findAll();
+    }
+
+    public void deletePost(Long postId, String nickname) {
+        Posts post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        if (!post.getUser().getNickname().equals(nickname)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        postRepository.delete(post);
     }
 }

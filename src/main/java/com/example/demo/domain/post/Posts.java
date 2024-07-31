@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
+@Setter
 public class Posts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,6 +66,12 @@ public class Posts {
     private Date startdate;
     @Column(nullable=false)
     private Date enddate;
+
+    public void setUntact(boolean untact) {
+    }
+
+    public void setTrade(boolean trade) {
+    }
 
     //Enum
     public enum Duration {
