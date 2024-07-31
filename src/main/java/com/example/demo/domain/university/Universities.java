@@ -1,10 +1,13 @@
 package com.example.demo.domain.university;
 
+import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.logging.log4j.util.Lazy;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -17,6 +20,19 @@ public class Universities {
 
     @Column(nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "universities", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Posts> posts;
+
+    // 기본 생성자
+    public Universities() {
+    }
+
+    // Long 타입의 생성자 추가
+    //public Universities(Long universityId) {
+    //    this.id = universityId;
+    //}
+
 
     public void setUniversityId(Long universityId) {
         this.id = universityId;

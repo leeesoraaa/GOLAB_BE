@@ -6,6 +6,7 @@ import com.example.demo.dto.user.UserRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Entity
@@ -20,12 +21,13 @@ public class Posts {
     @Column(name = "post_id")
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "university_id")
+    @Setter
     private Universities universities;
 
     @Setter
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -36,33 +38,51 @@ public class Posts {
     @Column(nullable = false)
     private float location_longitude;
     @Column(nullable = false)
+    @Setter
     private Timestamp created_at;
+    @Setter
     private Timestamp updated_at;
-    private boolean is_untact;
+    @Column (nullable = false)
+    private boolean isuntact;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Duration duration;
     @Column(nullable = false)
-    private boolean is_trade;
+    private boolean istrade;
     @Column(nullable = false)
     private String reward;
     @Column(nullable = false)
     private String requirements;
     @Column(nullable = false)
-    private String contact_link;
+    private String contactlink;
     private String etc;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
 
     @Column(nullable=true)
-    private String survey_link;
+    private String surveylink;
+    @Column(nullable=false)
+    private Date startdate;
+    @Column(nullable=false)
+    private Date enddate;
 
     //Enum
     public enum Duration {
         Min15, Min30, Hour1, Hour2, Over
     }
-     public enum Status {
+    public enum Status {
          Requested, Rejected, Accepted, Confirmed
-     }
+    }
+    @PrePersist
+    protected void onCreate() {
+        if (this.created_at == null) {
+            this.created_at = new Timestamp(System.currentTimeMillis());
+        }
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updated_at = new Timestamp(System.currentTimeMillis());
+    }
 }
