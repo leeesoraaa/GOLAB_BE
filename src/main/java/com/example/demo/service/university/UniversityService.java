@@ -28,4 +28,8 @@ public class UniversityService {
             return Collections.emptyList();
         }
     }
+
+    public List<Universities> getAllUniversities(){
+        return universityRepository.findAll();
+    }
 }

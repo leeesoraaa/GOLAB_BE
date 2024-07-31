@@ -1,9 +1,12 @@
 package com.example.demo.domain.user;
 
+import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.university.Universities;
 import com.example.demo.dto.user.UserRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,6 +17,7 @@ import lombok.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     @Column
     private String nickname;
@@ -25,6 +29,9 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "university_id")
     private Universities universities;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Posts> posts;
 
     public void updateEmail(String email) {
         this.email = email;

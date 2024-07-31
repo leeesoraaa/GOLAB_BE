@@ -24,8 +24,9 @@ public class Posts {
     @JoinColumn(name = "university_id")
     private Universities universities;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @Setter
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(nullable = false)
@@ -36,11 +37,11 @@ public class Posts {
     private float location_longitude;
     @Column(nullable = false)
     private Timestamp created_at;
-    @Column(nullable = false)
     private Timestamp updated_at;
     private boolean is_untact;
-
-    private enum duration {Min15, Min30, Hour1, Hour2, Over};
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Duration duration;
     @Column(nullable = false)
     private boolean is_trade;
     @Column(nullable = false)
@@ -50,11 +51,18 @@ public class Posts {
     @Column(nullable = false)
     private String contact_link;
     private String etc;
-    private enum status {Requested, Rejected, Accepted, Confirmed};
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
 
     @Column(nullable=true)
     private String survey_link;
 
-
-
+    //Enum
+    public enum Duration {
+        Min15, Min30, Hour1, Hour2, Over
+    }
+     public enum Status {
+         Requested, Rejected, Accepted, Confirmed
+     }
 }
