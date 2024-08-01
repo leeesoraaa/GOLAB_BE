@@ -2,12 +2,15 @@ package com.example.demo.service.post;
 
 import com.example.demo.domain.post.PostsRepository;
 import com.example.demo.domain.post.Posts;
+import com.example.demo.domain.university.Universities;
+import com.example.demo.domain.university.UniversityRepository;
 import com.example.demo.domain.user.User;
 import com.example.demo.domain.user.UserRepository;
 import com.example.demo.dto.post.PostRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -16,10 +19,15 @@ public class PostService {
 
     private final PostsRepository postRepository;
     private final UserRepository userRepository;
+    private final UniversityRepository universityRepository;
 
+    @Transactional
     public Posts createPost(String email, PostRequestDto postRequestDto) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Universities university = universityRepository.findById(postRequestDto.getUniversityId())
+                .orElseThrow(() -> new RuntimeException("University not found"));
 
         Posts post = Posts.builder()
                 .user(user)
@@ -37,11 +45,13 @@ public class PostService {
                 .surveylink(postRequestDto.getSurveylink())
                 .startdate(postRequestDto.getStartdate())
                 .enddate(postRequestDto.getEnddate())
+                .universities(university)
                 .build();
 
         return postRepository.save(post);
     }
 
+    @Transactional
     public Posts updatePost(Long postId, PostRequestDto postRequestDto, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -51,6 +61,9 @@ public class PostService {
         if (!post.getUser().equals(user)) {
             throw new RuntimeException("Unauthorized");
         }
+
+        Universities university = universityRepository.findById(postRequestDto.getUniversityId())
+                .orElseThrow(() -> new RuntimeException("University not found"));
 
         post.setTitle(postRequestDto.getTitle());
         post.setLocation_latitude(postRequestDto.getLocation_latitude());
@@ -66,6 +79,7 @@ public class PostService {
         post.setSurveylink(postRequestDto.getSurveylink());
         post.setStartdate(postRequestDto.getStartdate());
         post.setEnddate(postRequestDto.getEnddate());
+        post.setUniversities(university);
 
         return postRepository.save(post);
     }
@@ -79,6 +93,7 @@ public class PostService {
         return postRepository.findAll();
     }
 
+    @Transactional
     public void deletePost(Long postId, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
