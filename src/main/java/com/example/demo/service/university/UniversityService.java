@@ -2,6 +2,7 @@ package com.example.demo.service.university;
 
 import com.example.demo.domain.university.Universities;
 import com.example.demo.domain.university.UniversityRepository;
+import com.example.demo.dto.university.UniversitySearchResponseDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class UniversityService {
         this.universityRepository = universityRepository;
     }
 
-    public List<Universities> searchUniversities(String name) {
+    public List<UniversitySearchResponseDTO> searchUniversities(String name) {
         return universityRepository.findByNameStartingWith(name);
     }
 
@@ -29,7 +30,8 @@ public class UniversityService {
         }
     }
 
-    public List<Universities> getAllUniversities(){
-        return universityRepository.findAll();
+    public List<UniversitySearchResponseDTO> getAllUniversities(){
+
+        return universityRepository.findAllUniversity();
     }
 }

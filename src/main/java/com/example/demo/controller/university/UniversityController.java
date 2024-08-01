@@ -2,6 +2,7 @@ package com.example.demo.controller.university;
 
 
 import com.example.demo.domain.university.Universities;
+import com.example.demo.dto.university.UniversitySearchResponseDTO;
 import com.example.demo.service.university.UniversityService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class UniversityController {
     }
 
     @GetMapping("/search")
-    public List<Universities> searchUniversities(@RequestParam(required = false) String name) {
+    public List<UniversitySearchResponseDTO> searchUniversities(@RequestParam(required = false) String name) {
         if (name == null || name.isEmpty()) {
             return universityService.getAllUniversities();
         } else {
