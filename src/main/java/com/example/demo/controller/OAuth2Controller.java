@@ -16,7 +16,7 @@ public class OAuth2Controller {
 
     @GetMapping("/oauth2/callback/kakao")
     public String handleKakaoCallback(@RequestParam("code") String code) {
-        // 여기서 액세스 토큰을 가져오는 코드를 구현해야 합니다.
+        // 여기서 액세스 토큰을 가져오는 코드를 구현해야 합니다
         // 예: String accessToken = getAccessTokenFromCode(code);
 
         // JWT 생성
