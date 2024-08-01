@@ -31,22 +31,22 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         Map<String, Object> attributes = user.getAttributes();
 
         String email = null;
-        String name = null;
+        String nickname = null;
 
         if (token.getAuthorizedClientRegistrationId().equals("kakao")) {
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
             Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
             email = (String) kakaoAccount.get("email");
-            name = (String) profile.get("nickname");
+            nickname = (String) profile.get("nickname");
         }
 
-        if (email != null && name != null) {
+        if (email != null && nickname != null) {
             Optional<User> existingUser = userRepository.findByEmail(email);
             User userEntity;
             if (existingUser.isEmpty()) {
                 userEntity = new User();
                 userEntity.setEmail(email);
-                userEntity.setName(name);
+                userEntity.setNickname(nickname);
                 userRepository.save(userEntity);
             } else {
                 userEntity = existingUser.get();
