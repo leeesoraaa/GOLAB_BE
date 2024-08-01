@@ -6,8 +6,10 @@ import com.example.demo.security.OAuth2LoginSuccessHandler;
 import com.example.demo.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -40,7 +42,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
                                 .requestMatchers("/", "/login", "/oauth2/**", "/user/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers(HttpMethod.GET, "/**").permitAll() // 모든 GET 요청 허용
+                                .requestMatchers(HttpMethod.POST, "/**").permitAll() // 모든 POST 요청 허용
+                                .requestMatchers(HttpMethod.PUT,  "/**").permitAll() // USER 역할을 가진 사용자만 PUT 요청 허용
+                                .requestMatchers(HttpMethod.DELETE, "/**").permitAll() // USER 역할을 가진 사용자만 DELETE 요청 허용
+                                .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
@@ -57,8 +63,7 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(sessionManagement ->
                         sessionManagement
-                                .maximumSessions(1)
-                                .expiredUrl("/login?expired")
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 상태를 Stateless로 설정
                 );
 
         return http.build();

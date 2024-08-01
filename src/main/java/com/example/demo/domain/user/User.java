@@ -3,6 +3,7 @@ package com.example.demo.domain.user;
 import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.university.Universities;
 import com.example.demo.dto.user.UserRequestDto;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,7 @@ public class User {
     private Universities universities;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Posts> posts;
 
     public void updateEmail(String email) {

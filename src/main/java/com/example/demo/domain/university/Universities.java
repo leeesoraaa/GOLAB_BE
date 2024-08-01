@@ -2,6 +2,7 @@ package com.example.demo.domain.university;
 
 import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class Universities {
     private String name;
 
     @OneToMany(mappedBy = "universities", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Posts> posts;
 
     // 기본 생성자

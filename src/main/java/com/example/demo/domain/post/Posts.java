@@ -3,6 +3,7 @@ package com.example.demo.domain.post;
 import com.example.demo.domain.university.Universities;
 import com.example.demo.domain.user.User;
 import com.example.demo.dto.user.UserRequestDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,11 +25,13 @@ public class Posts {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "university_id")
     @Setter
+    @JsonBackReference
     private Universities universities;
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
 
     @Column(nullable = false)
