@@ -1,12 +1,10 @@
 package com.example.demo.domain.university;
 
 import com.example.demo.domain.post.Posts;
-import com.example.demo.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.logging.log4j.util.Lazy;
 
 import java.util.List;
 

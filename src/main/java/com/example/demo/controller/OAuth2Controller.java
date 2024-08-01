@@ -21,9 +21,9 @@ public class OAuth2Controller {
 
         // JWT 생성
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String jwtToken = jwtTokenProvider.createToken(authentication);
+        String email = authentication.getName();
+        String jwtToken = jwtTokenProvider.createToken(email);
 
         return "Authorization code: " + code + ", JWT: " + jwtToken;
     }
-
 }

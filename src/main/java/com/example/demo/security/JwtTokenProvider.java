@@ -5,8 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -29,16 +27,8 @@ public class JwtTokenProvider {
         this.secretKey = Keys.hmacShaKeyFor(secretKeyString.getBytes());
     }
 
-    public String createToken(Authentication authentication) {
-        String username;
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        } else {
-            username = authentication.getName();
-        }
-
-        Claims claims = Jwts.claims().setSubject(username);
-//        Claims claims = Jwts.claims().setSubject(email);
+    public String createToken(String email) {
+        Claims claims = Jwts.claims().setSubject(email);
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -60,13 +50,8 @@ public class JwtTokenProvider {
         }
     }
 
-    public String getNickName(String token) {
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        return claims.get("nickname", String.class);
-    }
-
     public String getEmail(String token) {
-        Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        return claims.get("email", String.class);
+        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+        return claims.getSubject();
     }
 }
