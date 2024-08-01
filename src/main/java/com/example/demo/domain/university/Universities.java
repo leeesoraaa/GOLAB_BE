@@ -20,7 +20,7 @@ public class Universities {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "universities", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "universities", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = false)
     @JsonManagedReference
     private List<Posts> posts;
 

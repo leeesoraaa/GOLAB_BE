@@ -19,7 +19,7 @@ public class PostController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping
-    public ResponseEntity<Posts> createPost(@RequestHeader("Authorization") String token,
+    public ResponseEntity<Posts> createPost(@RequestHeader("accessToken") String token,
                                             @RequestBody PostRequestDto postRequestDto) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         Posts createdPost = postService.createPost(email, postRequestDto);
@@ -39,7 +39,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<Posts> updatePost(@RequestHeader("Authorization") String token,
+    public ResponseEntity<Posts> updatePost(@RequestHeader("accessToken") String token,
                                             @PathVariable Long postId,
                                             @RequestBody PostRequestDto postRequestDto) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
@@ -48,7 +48,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deletePost(@RequestHeader("Authorization") String token,
+    public ResponseEntity<Void> deletePost(@RequestHeader("accessToken") String token,
                                            @PathVariable Long postId) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         postService.deletePost(postId, email);
