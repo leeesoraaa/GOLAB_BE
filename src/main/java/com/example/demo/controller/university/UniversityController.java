@@ -19,12 +19,12 @@ public class UniversityController {
         this.universityService = universityService;
     }
 
-    @PostMapping("/search")
-    public List<Universities> searchUniversities(@RequestParam String name) {
-        return universityService.searchUniversities(name);
-    }
     @GetMapping("/search")
-    public List<Universities> getAllUniversities() {
-        return universityService.getAllUniversities();
+    public List<Universities> searchUniversities(@RequestParam(required = false) String name) {
+        if (name == null || name.isEmpty()) {
+            return universityService.getAllUniversities();
+        } else {
+            return universityService.searchUniversities(name);
+        }
     }
 }
