@@ -17,19 +17,11 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<String> saveUser(@RequestHeader String accessToken,
-                                      @RequestBody UserRequestDto userRequest) {
+                                           @RequestBody UserRequestDto userRequest) {
 
-        String nickname = jwtTokenProvider.getNickName(accessToken);
         String email = jwtTokenProvider.getEmail(accessToken);
-        userService.updateUser(nickname, email, userRequest);
+        userService.updateUser(email, userRequest);
 
         return ResponseEntity.ok("저장되었습니다.");
-
-//        User savedUser = userService.saveOrUpdateUser(
-//
-//                userRequest.getName(),
-//                userRequest.getUniversityId()
-//        );
-//        return ResponseEntity.ok(savedUser);
     }
 }

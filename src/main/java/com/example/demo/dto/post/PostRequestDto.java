@@ -4,30 +4,33 @@ import com.example.demo.domain.post.Posts;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-
 
 @Data
 @Builder
 @Getter
+@Setter
 public class PostRequestDto {
+
     private String title;
-    private Long universityId;
-    private float locationLatitude;
-    private float locationLongitude;
-    private Timestamp created_At;
-    private Timestamp updated_At;
+    private float location_latitude;
+    private float location_longitude;
     private boolean isUntact;
-    private Posts.Duration duration;
     private boolean isTrade;
     private String reward;
     private String requirements;
-    private String contactLink;
+    private String contactlink;
     private String etc;
-    private Posts.Status status;
-    private String surveyLink;
+    private String surveylink;
     private Date startdate;
     private Date enddate;
+    private Posts.Duration duration;
+    private Posts.Status status;
+    private Long universityId;
+
+
+
+
 }

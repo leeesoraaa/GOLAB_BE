@@ -2,7 +2,6 @@ package com.example.demo.domain.post;
 
 import com.example.demo.domain.university.Universities;
 import com.example.demo.domain.user.User;
-import com.example.demo.dto.user.UserRequestDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
