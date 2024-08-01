@@ -31,7 +31,7 @@ public class User {
     @JoinColumn(name = "university_id")
     private Universities universities;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JsonManagedReference
     private List<Posts> posts;
 
