@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/")
 @RequiredArgsConstructor
 public class ApplicationController {
 
@@ -26,13 +26,13 @@ public class ApplicationController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @GetMapping("/{postId}/applications")
+    @GetMapping("posts/{postId}/applications")
     public ResponseEntity<List<Application>> getApplicationsByPostId(@PathVariable Long postId) {
         List<Application> applications = applicationService.findByPostId(postId);
         return ResponseEntity.ok(applications);
     }
 
-    @PostMapping("/{postId}/applications")
+    @PostMapping("posts/{postId}/applications")
     public ResponseEntity<String> createApplication(@PathVariable Long postId, @RequestHeader("accessToken") String token, @RequestBody ApplicationRequestDto applicationRequestDto) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         Optional<User> user = userService.findByEmail(email);
