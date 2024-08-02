@@ -18,6 +18,7 @@ public class PostRequestDto {
     private float location_latitude;
     private float location_longitude;
     private boolean isUntact;
+    private int people;
     private String reward;
     private String requirements;
     private String contactlink;
