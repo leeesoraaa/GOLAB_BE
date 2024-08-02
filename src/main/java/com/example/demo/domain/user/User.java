@@ -35,6 +35,14 @@ public class User {
     @JsonManagedReference
     private List<Posts> posts;
 
+    private int noshow = 0;
+
+    private int late = 0;
+
+    private float trust = 0.0f;
+
+    private boolean isbanned = false;
+
     public void updateEmail(String email) {
         this.email = email;
     }
