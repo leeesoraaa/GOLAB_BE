@@ -100,4 +100,15 @@ public class PostService {
 
         postRepository.deleteById(postId);
     }
+
+    public List<Posts> getPostsByUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return postRepository.findAllByUser(user);
+    }
+    public List<Posts> getPostsByUniversity(Long universityId) {
+        Universities university = universityRepository.findById(universityId)
+                .orElseThrow(() -> new RuntimeException("University not found"));
+        return postRepository.findAllByUniversities(university);
+    }
 }
