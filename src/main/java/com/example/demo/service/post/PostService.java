@@ -44,6 +44,7 @@ public class PostService {
                 .startdate(postRequestDto.getStartdate())
                 .enddate(postRequestDto.getEnddate())
                 .universities(university)
+                .location_name(postRequestDto.getLocation_name())
                 .build();
 
         return postRepository.save(post);
@@ -76,6 +77,7 @@ public class PostService {
         post.setStartdate(postRequestDto.getStartdate());
         post.setEnddate(postRequestDto.getEnddate());
         post.setUniversities(university);
+        post.setLocation_name(postRequestDto.getLocation_name());
 
         return postRepository.save(post);
     }
