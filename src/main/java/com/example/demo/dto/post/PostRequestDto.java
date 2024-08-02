@@ -18,16 +18,13 @@ public class PostRequestDto {
     private float location_latitude;
     private float location_longitude;
     private boolean isUntact;
-    private boolean isTrade;
     private String reward;
     private String requirements;
     private String contactlink;
-    private String etc;
     private String surveylink;
     private Date startdate;
     private Date enddate;
     private Posts.Duration duration;
-    private Posts.Status status;
     private Long universityId;
 
 

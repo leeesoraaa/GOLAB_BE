@@ -50,17 +50,11 @@ public class Posts {
     @Enumerated(EnumType.STRING)
     private Duration duration;
     @Column(nullable = false)
-    private boolean istrade;
-    @Column(nullable = false)
     private String reward;
     @Column(nullable = false)
     private String requirements;
     @Column(nullable = false)
     private String contactlink;
-    private String etc;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Status status;
 
     @Column(nullable=true)
     private String surveylink;
@@ -79,9 +73,7 @@ public class Posts {
     public enum Duration {
         Min15, Min30, Hour1, Hour2, Over
     }
-    public enum Status {
-         Requested, Rejected, Accepted, Confirmed
-    }
+
     @PrePersist
     protected void onCreate() {
         if (this.created_at == null) {

@@ -36,12 +36,9 @@ public class PostService {
                 .location_longitude(postRequestDto.getLocation_longitude())
                 .isuntact(postRequestDto.isUntact())
                 .duration(postRequestDto.getDuration())
-                .istrade(postRequestDto.isTrade())
                 .reward(postRequestDto.getReward())
                 .requirements(postRequestDto.getRequirements())
                 .contactlink(postRequestDto.getContactlink())
-                .etc(postRequestDto.getEtc())
-                .status(postRequestDto.getStatus())
                 .surveylink(postRequestDto.getSurveylink())
                 .startdate(postRequestDto.getStartdate())
                 .enddate(postRequestDto.getEnddate())
@@ -70,12 +67,9 @@ public class PostService {
         post.setLocation_longitude(postRequestDto.getLocation_longitude());
         post.setIsuntact(postRequestDto.isUntact());
         post.setDuration(postRequestDto.getDuration());
-        post.setIstrade(postRequestDto.isTrade());
         post.setReward(postRequestDto.getReward());
         post.setRequirements(postRequestDto.getRequirements());
         post.setContactlink(postRequestDto.getContactlink());
-        post.setEtc(postRequestDto.getEtc());
-        post.setStatus(postRequestDto.getStatus());
         post.setSurveylink(postRequestDto.getSurveylink());
         post.setStartdate(postRequestDto.getStartdate());
         post.setEnddate(postRequestDto.getEnddate());
