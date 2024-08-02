@@ -16,7 +16,12 @@ public class ReviewService {
 
     @Transactional
     public void reviewUser(Long userId, boolean noshow, boolean late) {
+        if (noshow && late) {
+            throw new IllegalArgumentException("late와 noshow는 동시에 true일 수 없습니다.");
+        }
+
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
 
         Review review = new Review();
         review.setUser(user);
