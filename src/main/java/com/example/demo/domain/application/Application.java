@@ -1,28 +1,32 @@
 package com.example.demo.domain.application;
 
 import com.example.demo.domain.post.Posts;
-import com.example.demo.domain.university.Universities;
 import com.example.demo.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@Entity
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id")
     private Long id;
 
-    @OneToOne (fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    @Setter
     @JsonBackReference
-    private Posts posts;
+    private Posts post;
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @JsonBackReference
@@ -33,10 +37,11 @@ public class Application {
     private Status status;
 
     @Column(nullable = false)
-    private boolean is_trade;
+    private boolean isTrade;
 
-    @Column(nullable = true)
-    private Posts exchange_postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exchange_postId", nullable = true)
+    private Posts exchangePost;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -53,9 +58,15 @@ public class Application {
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
-    @Column(nullable = false)
-    @Setter
-    private Timestamp created_at;
+    // 추가: isTrade 필드에 대한 getter와 setter
+    public boolean isTrade() {
+        return isTrade;
+    }
+
+    public void setTrade(boolean isTrade) {
+        this.isTrade = isTrade;
+    }
+
     public enum Status {
         Requested, Rejected, Soorack, Mannam
     }

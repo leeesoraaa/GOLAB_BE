@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -19,5 +21,8 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.updateUser(userRequestDto);
+    }
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
