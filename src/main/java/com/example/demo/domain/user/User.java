@@ -50,4 +50,7 @@ public class User {
         }
         this.universities.setUniversityId(universityId);
     }
+    public Long getUniversityId() {
+        return universities != null ? universities.getId() : null;
+    }
 }

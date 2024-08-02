@@ -52,8 +52,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 userEntity = existingUser.get();
             }
 
+            boolean isRegisterComplete = userEntity.getName() != null && !userEntity.getName().isEmpty() &&
+                    userEntity.getUniversityId() != null;
+
             String jwtToken = jwtTokenProvider.createToken(userEntity.getEmail());
-            String redirectUrl = "http://localhost:3000/authkakao?accessToken=" + jwtToken;
+            String redirectUrl = "http://localhost:3000/authkakao?accessToken=" + jwtToken +
+                    "&isRegisterComplete=" + isRegisterComplete;;
             response.sendRedirect(redirectUrl);
         } else {
             response.sendRedirect("/login?error");
