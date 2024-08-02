@@ -40,6 +40,8 @@ public class Posts {
     @Column(nullable = false)
     private float location_longitude;
     @Column(nullable = false)
+    private int people;
+    @Column(nullable = false)
     @Setter
     private Timestamp created_at;
     @Setter

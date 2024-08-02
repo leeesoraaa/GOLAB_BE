@@ -34,6 +34,7 @@ public class PostService {
                 .title(postRequestDto.getTitle())
                 .location_latitude(postRequestDto.getLocation_latitude())
                 .location_longitude(postRequestDto.getLocation_longitude())
+                .people(postRequestDto.getPeople())
                 .isuntact(postRequestDto.isUntact())
                 .duration(postRequestDto.getDuration())
                 .reward(postRequestDto.getReward())
@@ -66,6 +67,7 @@ public class PostService {
         post.setLocation_latitude(postRequestDto.getLocation_latitude());
         post.setLocation_longitude(postRequestDto.getLocation_longitude());
         post.setIsuntact(postRequestDto.isUntact());
+        post.setPeople(postRequestDto.getPeople());
         post.setDuration(postRequestDto.getDuration());
         post.setReward(postRequestDto.getReward());
         post.setRequirements(postRequestDto.getRequirements());
