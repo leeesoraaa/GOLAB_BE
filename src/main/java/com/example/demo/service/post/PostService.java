@@ -28,7 +28,9 @@ public class PostService {
 
         Universities university = universityRepository.findById(postRequestDto.getUniversityId())
                 .orElseThrow(() -> new RuntimeException("University not found"));
-
+        if (user.isIsbanned()) {
+            throw new RuntimeException("User is banned from creating posts");
+        }
         Posts post = Posts.builder()
                 .user(user)
                 .title(postRequestDto.getTitle())
