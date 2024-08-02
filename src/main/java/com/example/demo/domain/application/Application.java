@@ -3,6 +3,7 @@ package com.example.demo.domain.application;
 import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -39,7 +40,7 @@ public class Application {
     @Column(nullable = false)
     private boolean isTrade;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "exchange_postId", nullable = true)
     private Posts exchangePost;
 
