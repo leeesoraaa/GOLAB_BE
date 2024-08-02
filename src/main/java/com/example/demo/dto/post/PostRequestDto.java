@@ -27,8 +27,4 @@ public class PostRequestDto {
     private Date enddate;
     private Posts.Duration duration;
     private Long universityId;
-
-
-
-
 }
