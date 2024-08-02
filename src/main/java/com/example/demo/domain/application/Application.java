@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class Application {
     @Id
@@ -30,14 +31,32 @@ public class Application {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @Column(nullable = false)
     private boolean is_trade;
-    @Column(nullable = false)
+
+    @Column(nullable = true)
     private Posts exchange_postId;
+
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
     @Column(nullable = false)
     @Setter
     private Timestamp created_at;
     public enum Status {
-        Requested, Rejected, Accepted, Confirmed
+        Requested, Rejected, Soorack, Mannam
     }
 }

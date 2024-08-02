@@ -39,6 +39,8 @@ public class Posts {
     private float location_latitude;
     @Column(nullable = false)
     private float location_longitude;
+    @Column(nullable=false)
+    private String location_name;
     @Column(nullable = false)
     private int people;
     @Column(nullable = false)
