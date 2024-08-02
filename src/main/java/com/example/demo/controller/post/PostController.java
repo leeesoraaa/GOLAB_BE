@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/posts")
 @RequiredArgsConstructor
 public class PostController {
 
@@ -32,6 +32,12 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<List<Posts>> getUserPosts(@RequestHeader("accessToken") String token) {
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
+        List<Posts> userPosts = postService.getPostsByUser(email);
+        return ResponseEntity.ok(userPosts);
+    }
     @GetMapping
     public ResponseEntity<List<Posts>> getAllPosts() {
         List<Posts> posts = postService.getAllPosts();
