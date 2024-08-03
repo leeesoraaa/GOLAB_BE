@@ -81,21 +81,42 @@ public class ApplicationController {
     @GetMapping("/applications/{id}")
     public ResponseEntity<Application> getApplicationById(@PathVariable Long id) {
         Optional<Application> application = applicationService.findById(id);
-        return application.map(ResponseEntity ::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return application.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/applications/{id}")
-    public ResponseEntity<Application> updateApplication(@PathVariable Long id, @RequestBody Application applicationDetails) {
-        Optional<Application> optionalApplication = applicationService.findById(id);
-        if (optionalApplication.isPresent()) {
-            Application application = optionalApplication.get();
-            application.setStatus(applicationDetails.getStatus());
-            application.setTrade(applicationDetails.isTrade());
-            application.setExchangePost(applicationDetails.getExchangePost());
-            Application updatedApplication = applicationService.save(application);
-            return ResponseEntity.ok(updatedApplication);
+    // 도와주기일때 수락하기
+    @PutMapping("/applications/{id}/soorack")
+    public ResponseEntity<String> soorackApplication(@PathVariable Long id, @RequestHeader("accessToken") String token) {
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
+        String result = applicationService.changeApplicationStatus(id, email, Status.Soorack, Status.Requested);
+        if (result.equals("지원 상태가 변경되었습니다.")) {
+            return ResponseEntity.ok(result);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(result);
+        }
+    }
+
+    // 일반지원자는 Requested, 도와주기는 Requested 또는 Soorack에서 거절하기
+    @PutMapping("/applications/{id}/reject")
+    public ResponseEntity<String> rejectApplication(@PathVariable Long id, @RequestHeader("accessToken") String token) {
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
+        String result = applicationService.changeApplicationStatus(id, email, Status.Rejected, Status.Requested);
+        if (result.equals("지원 상태가 변경되었습니다.")) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.badRequest().body(result);
+        }
+    }
+
+    // 일반지원자는 Requested, 도와주기는 Soorack에서 확정하기(Mannam)
+    @PutMapping("/applications/{id}/mannam")
+    public ResponseEntity<String> mannamApplication(@PathVariable Long id, @RequestHeader("accessToken") String token) {
+        String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
+        String result = applicationService.changeApplicationStatus(id, email, Status.Mannam, Status.Soorack);
+        if (result.equals("지원 상태가 변경되었습니다.")) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.badRequest().body(result);
         }
     }
 
