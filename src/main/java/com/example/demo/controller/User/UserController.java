@@ -1,11 +1,15 @@
 package com.example.demo.controller.User;
 
+import com.example.demo.domain.user.User;
 import com.example.demo.dto.user.UserRequestDto;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -24,4 +28,26 @@ public class UserController {
 
         return ResponseEntity.ok("저장되었습니다.");
     }
+
+    @GetMapping("/mypage")
+    public ResponseEntity<Map<String, Object>> getUser(@RequestHeader String accessToken) {
+        String email = jwtTokenProvider.getEmail(accessToken);
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("name", user.getName());
+        response.put("universityId", user.getUniversityId());
+        response.put("nickname", user.getNickname());
+        response.put("email", user.getEmail());
+        response.put("noshow", user.getNoshow());
+        response.put("late", user.getLate());
+        response.put("trust", user.getTrust());
+        response.put("isbanned", user.isIsbanned());
+        response.put("participated", user.getParticipated());
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }
