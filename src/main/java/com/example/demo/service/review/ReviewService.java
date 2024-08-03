@@ -29,7 +29,6 @@ public class ReviewService {
         if (reviewRepository.existsByApplicationId(applicationId)) {
             throw new RuntimeException("Review for this application already exists");
         }
-
         User user = application.getUser();
 
         Review review = new Review();
@@ -52,7 +51,11 @@ public class ReviewService {
         if (trust >= 3) {
             user.setIsbanned(true);
         }
-
+        if (noshow) {
+            user.setNoshow(user.getNoshow() + 1);
+        } else {
+            user.incrementParticipated(); // noshow가 false일 때만 participated 값을 증가시킴
+        }
         userRepository.save(user);
     }
 }
