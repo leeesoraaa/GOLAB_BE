@@ -41,6 +41,10 @@ public class ApplicationController {
             return ResponseEntity.status(401).body("Unauthorized");
         }
 
+        if (user.get().isIsbanned()) {
+            throw new RuntimeException("User is banned from creating posts");
+        }
+
         Posts post = postService.getPost(postId);
         if (post != null) {
             User author = post.getUser();
