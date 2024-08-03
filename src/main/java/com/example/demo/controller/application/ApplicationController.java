@@ -5,6 +5,7 @@ import com.example.demo.domain.application.Application.Status;
 import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.user.User;
 import com.example.demo.dto.application.ApplicationRequestDto;
+import com.example.demo.dto.application.ApplicationResponseDto;
 import com.example.demo.service.application.ApplicationService;
 import com.example.demo.service.post.PostService;
 import com.example.demo.service.user.UserService;
@@ -33,7 +34,7 @@ public class ApplicationController {
     }
 
     @PostMapping("/posts/{postId}/applications")
-    public ResponseEntity<String> createApplication(@PathVariable Long postId, @RequestHeader("accessToken") String token, @RequestBody ApplicationRequestDto applicationRequestDto) {
+    public ResponseEntity<?> createApplication(@PathVariable Long postId, @RequestHeader("accessToken") String token, @RequestBody ApplicationRequestDto applicationRequestDto) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
         Optional<User> user = userService.findByEmail(email);
 
@@ -72,10 +73,12 @@ public class ApplicationController {
             }
 
             applicationService.save(application);
-            return ResponseEntity.ok("지원되었습니다.");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+            if (application.isTrade()) {
+                return ResponseEntity.ok("지원되었습니다.");
+            } else {
+                return ResponseEntity.ok(post.getContactlink());
+            }
+        } return ResponseEntity.badRequest().body("post가 없습니다.");
     }
 
     @GetMapping("/applications/{id}")
@@ -86,13 +89,13 @@ public class ApplicationController {
 
     // 도와주기일때 수락하기
     @PutMapping("/applications/{id}/soorack")
-    public ResponseEntity<String> soorackApplication(@PathVariable Long id, @RequestHeader("accessToken") String token) {
+    public ResponseEntity<?> soorackApplication(@PathVariable Long id, @RequestHeader("accessToken") String token) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
-        String result = applicationService.changeApplicationStatus(id, email, Status.Soorack, Status.Requested);
-        if (result.equals("지원 상태가 변경되었습니다.")) {
-            return ResponseEntity.ok(result);
+        ApplicationResponseDto response = applicationService.acceptApplication(id, email);
+        if (response.getStatus().equals("Soorack")) {
+            return ResponseEntity.ok(response);
         } else {
-            return ResponseEntity.badRequest().body(result);
+            return ResponseEntity.badRequest().body(response.getMessage());
         }
     }
 

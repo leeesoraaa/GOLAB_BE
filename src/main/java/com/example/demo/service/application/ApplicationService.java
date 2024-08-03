@@ -6,6 +6,7 @@ import com.example.demo.domain.application.ApplicationRepository;
 import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.post.PostsRepository;
 import com.example.demo.domain.user.User;
+import com.example.demo.dto.application.ApplicationResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,37 @@ public class ApplicationService {
         return postOptional.isPresent() && postOptional.get().getUser().getEmail().equals(userEmail);
     }
 
-    public String changeApplicationStatus(Long id, String userEmail, Status newStatus, Status requiredStatus) {
+    public ApplicationResponseDto acceptApplication(Long applicationId, String userEmail) {
+        Optional<Application> optionalApplication = applicationRepository.findById(applicationId);
+
+        if (optionalApplication.isEmpty()) {
+            return new ApplicationResponseDto("Error", "Application not found", null);
+        }
+
+        Application application = optionalApplication.get();
+        Posts post = application.getPost();
+        User author = post.getUser();
+
+        if (!author.getEmail().equals(userEmail)) {
+            return new ApplicationResponseDto("Error", "Unauthorized", null);
+        }
+
+        if (application.getStatus() != Status.Requested || !application.isTrade()) {
+            return new ApplicationResponseDto("Error", "Invalid status transition", null);
+        }
+
+        application.setStatus(Status.Soorack);
+        Application updatedApplication = applicationRepository.save(application);
+
+        String contactLink = null;
+        if (application.getExchangePost() != null) {
+            contactLink = application.getExchangePost().getContactlink();
+        }
+
+        return new ApplicationResponseDto("Soorack","지원이 수락되었습니다.", contactLink);
+    }
+
+    public String changeApplicationStatus (Long id, String userEmail, Status newStatus, Status requiredStatus){
         Optional<Application> optionalApplication = applicationRepository.findById(id);
         if (optionalApplication.isPresent()) {
             Application application = optionalApplication.get();
