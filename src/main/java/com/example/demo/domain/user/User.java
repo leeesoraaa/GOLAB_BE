@@ -42,6 +42,7 @@ public class User {
     private float trust = 0.0f;
 
     private boolean isbanned = false;
+    private int participated;
 
     public void updateEmail(String email) {
         this.email = email;
@@ -60,5 +61,8 @@ public class User {
     }
     public Long getUniversityId() {
         return universities != null ? universities.getId() : null;
+    }
+    public void incrementParticipated() {
+        this.participated++;
     }
 }
