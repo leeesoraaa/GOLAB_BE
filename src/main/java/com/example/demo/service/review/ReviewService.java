@@ -1,5 +1,7 @@
 package com.example.demo.service.review;
 
+import com.example.demo.domain.application.Application;
+import com.example.demo.domain.application.ApplicationRepository;
 import com.example.demo.domain.review.Review;
 import com.example.demo.domain.review.ReviewRepository;
 import com.example.demo.domain.user.User;
@@ -13,20 +15,28 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+    private final ApplicationRepository applicationRepository;
 
     @Transactional
-    public void reviewUser(Long userId, boolean noshow, boolean late) {
+    public void reviewUser(Long userId, boolean noshow, boolean late, Long applicationId) {
         if (noshow && late) {
             throw new IllegalArgumentException("late와 noshow는 동시에 true일 수 없습니다.");
         }
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new RuntimeException("Application not found"));
 
+        if (reviewRepository.existsByApplicationId(applicationId)) {
+            throw new RuntimeException("Review for this application already exists");
+        }
+
+        User user = application.getUser();
 
         Review review = new Review();
         review.setUser(user);
         review.setNoshow(noshow);
         review.setLate(late);
+        review.setApplication(application); // application 설정
         reviewRepository.save(review);
 
         if (noshow) {

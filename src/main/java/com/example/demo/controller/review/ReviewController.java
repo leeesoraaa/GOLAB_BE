@@ -16,7 +16,7 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<String> reviewUser(@RequestHeader("accessToken") String token
             ,@RequestBody ReviewRequestDto reviewRequestDto) {
-        reviewService.reviewUser(reviewRequestDto.getUserId(), reviewRequestDto.isNoshow(), reviewRequestDto.isLate());
+        reviewService.reviewUser(reviewRequestDto.getUserId(), reviewRequestDto.isNoshow(), reviewRequestDto.isLate(), reviewRequestDto.getApplicationId());
         return ResponseEntity.ok("Review submitted successfully");
     }
 }
