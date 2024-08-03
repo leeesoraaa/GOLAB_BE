@@ -40,4 +40,7 @@ public class ApplicationService {
     public Optional<Posts> findPostById(Long id) {
         return postRepository.findById(id);
     }
+    public boolean existsByPostIdAndUserId(Long postId, Long userId) {
+        return applicationRepository.existsByPostIdAndUserId(postId, userId);
+    }
 }
