@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping()
 @RequiredArgsConstructor
 public class ApplicationController {
 
@@ -47,6 +47,15 @@ public class ApplicationController {
 
         Posts post = postService.getPost(postId);
         if (post != null) {
+            User author = post.getUser();
+
+            if (author.getEmail().equals(email)) {
+                return ResponseEntity.badRequest().body("작성자는 지원할 수 없습니다.");
+            }
+            if (applicationService.existsByPostIdAndUserId(postId, user.get().getId())) {
+                return ResponseEntity.badRequest().body("이미 지원되었습니다.");
+            }
+
             Application application = new Application();
             application.setPost(post);
             application.setUser(user.get());
