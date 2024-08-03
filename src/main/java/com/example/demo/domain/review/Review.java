@@ -1,5 +1,6 @@
 package com.example.demo.domain.review;
 
+import com.example.demo.domain.application.Application;
 import com.example.demo.domain.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,6 +23,10 @@ public class Review {
     private boolean noshow;
 
     private boolean late;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "application_id")
+    private Application application;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
