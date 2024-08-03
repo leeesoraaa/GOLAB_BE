@@ -103,7 +103,7 @@ public class ApplicationController {
     @PutMapping("/applications/{id}/reject")
     public ResponseEntity<String> rejectApplication(@PathVariable Long id, @RequestHeader("accessToken") String token) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
-        String result = applicationService.changeApplicationStatus(id, email, Status.Rejected, Status.Requested);
+        String result = applicationService.changeApplicationStatus(id, email, Status.Rejected, Status.Requested, Status.Soorack);
         if (result.equals("지원 상태가 변경되었습니다.")) {
             return ResponseEntity.ok(result);
         } else {

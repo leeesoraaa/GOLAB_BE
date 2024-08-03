@@ -87,7 +87,7 @@ public class ApplicationService {
         return new ApplicationResponseDto("Soorack","지원이 수락되었습니다.", contactLink);
     }
 
-    public String changeApplicationStatus (Long id, String userEmail, Status newStatus, Status requiredStatus){
+    public String changeApplicationStatus(Long id, String userEmail, Status newStatus, Status... requiredStatuses) {
         Optional<Application> optionalApplication = applicationRepository.findById(id);
         if (optionalApplication.isPresent()) {
             Application application = optionalApplication.get();
@@ -98,7 +98,15 @@ public class ApplicationService {
                 return "작성자만 지원 상태를 변경할 수 있습니다.";
             }
 
-            if (application.getStatus() == requiredStatus) {
+            boolean isValidStatus = false;
+            for (Status requiredStatus : requiredStatuses) {
+                if (application.getStatus() == requiredStatus) {
+                    isValidStatus = true;
+                    break;
+                }
+            }
+
+            if (isValidStatus) {
                 application.setStatus(newStatus);
                 applicationRepository.save(application);
                 return "지원 상태가 변경되었습니다.";
