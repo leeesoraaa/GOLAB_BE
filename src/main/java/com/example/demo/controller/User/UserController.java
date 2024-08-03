@@ -35,13 +35,9 @@ public class UserController {
         User user = userService.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserRequestDto userRequestDto = UserRequestDto.builder()
-                .name(user.getName())
-                .universityId(user.getUniversityId())
-                .build();
-
         Map<String, Object> response = new HashMap<>();
-        response.put("user", userRequestDto);
+        response.put("name", user.getName());
+        response.put("universityId", user.getUniversityId());
         response.put("nickname", user.getNickname());
         response.put("email", user.getEmail());
         response.put("noshow", user.getNoshow());
@@ -52,5 +48,6 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
 
 }
