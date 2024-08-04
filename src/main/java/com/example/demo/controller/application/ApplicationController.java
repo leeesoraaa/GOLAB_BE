@@ -4,8 +4,9 @@ import com.example.demo.domain.application.Application;
 import com.example.demo.domain.application.Application.Status;
 import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.user.User;
+import com.example.demo.dto.application.ApplicationGetResponseDto;
 import com.example.demo.dto.application.ApplicationRequestDto;
-import com.example.demo.dto.application.ApplicationResponseDto;
+import com.example.demo.dto.application.ApplicationStatusResponseDto;
 import com.example.demo.service.application.ApplicationService;
 import com.example.demo.service.post.PostService;
 import com.example.demo.service.user.UserService;
@@ -28,8 +29,8 @@ public class ApplicationController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @GetMapping("/posts/{postId}/applications")
-    public ResponseEntity<List<Application>> getApplicationsByPostId(@PathVariable Long postId) {
-        List<Application> applications = applicationService.findByPostId(postId);
+    public ResponseEntity<List<ApplicationGetResponseDto>> getApplicationsByPostId(@PathVariable Long postId) {
+        List<ApplicationGetResponseDto> applications = applicationService.findByPostId(postId);
         return ResponseEntity.ok(applications);
     }
 
@@ -92,7 +93,7 @@ public class ApplicationController {
     @PutMapping("/applications/{id}/soorack")
     public ResponseEntity<?> soorackApplication(@PathVariable Long id, @RequestHeader("accessToken") String token) {
         String email = jwtTokenProvider.getEmail(token.replace("Bearer ", ""));
-        ApplicationResponseDto response = applicationService.acceptApplication(id, email);
+        ApplicationStatusResponseDto response = applicationService.acceptApplication(id, email);
         if (response.getStatus().equals("Soorack")) {
             return ResponseEntity.ok(response);
         } else {
