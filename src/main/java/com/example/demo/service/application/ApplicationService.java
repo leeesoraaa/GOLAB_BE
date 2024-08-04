@@ -79,12 +79,25 @@ public class ApplicationService {
         application.setStatus(Status.Soorack);
         Application updatedApplication = applicationRepository.save(application);
 
-        String contactLink = null;
-        if (application.getExchangePost() != null) {
-            contactLink = application.getExchangePost().getContactlink();
+        // 교환할 게시물의 상태도 Soorack으로 변경
+        Posts exchangePost = application.getExchangePost();
+        if (exchangePost != null) {
+            Application exchangeApplication = new Application();
+            exchangeApplication.setPost(exchangePost);
+            exchangeApplication.setUser(author);  // 교환 게시물의 작성자를 지원자로 설정
+            exchangeApplication.setStatus(Status.Soorack);
+            exchangeApplication.setTrade(true);
+            exchangeApplication.setExchangePost(post);  // 도와주기한 postid 설정
+
+            applicationRepository.save(exchangeApplication);
         }
 
-        return new ApplicationResponseDto("Soorack","지원이 수락되었습니다.", contactLink);
+        String contactLink = null;
+        if (exchangePost != null) {
+            contactLink = exchangePost.getContactlink();
+        }
+
+        return new ApplicationResponseDto("Soorack", "지원이 수락되었습니다.", contactLink);
     }
 
     public String changeApplicationStatus(Long id, String userEmail, Status newStatus, Status... requiredStatuses) {
