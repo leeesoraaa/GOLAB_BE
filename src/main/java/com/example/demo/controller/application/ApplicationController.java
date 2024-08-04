@@ -54,6 +54,7 @@ public class ApplicationController {
             if (author.getEmail().equals(email)) {
                 return ResponseEntity.badRequest().body("작성자는 지원할 수 없습니다.");
             }
+
             if (applicationService.existsByPostIdAndUserId(postId, user.get().getId())) {
                 return ResponseEntity.badRequest().body("이미 지원되었습니다.");
             }
