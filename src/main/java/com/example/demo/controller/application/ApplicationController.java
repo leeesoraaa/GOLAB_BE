@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping()
@@ -84,9 +85,14 @@ public class ApplicationController {
     }
 
     @GetMapping("/applications/{id}")
-    public ResponseEntity<Application> getApplicationById(@PathVariable Long id) {
+    public ResponseEntity<ApplicationGetResponseDto> getApplicationById(@PathVariable Long id) {
         Optional<Application> application = applicationService.findById(id);
-        return application.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (application.isPresent()) {
+            ApplicationGetResponseDto responseDto = new ApplicationGetResponseDto(application.get());
+            return ResponseEntity.ok(responseDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // 도와주기일때 수락하기
