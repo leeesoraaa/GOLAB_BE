@@ -6,7 +6,8 @@ import com.example.demo.domain.application.ApplicationRepository;
 import com.example.demo.domain.post.Posts;
 import com.example.demo.domain.post.PostsRepository;
 import com.example.demo.domain.user.User;
-import com.example.demo.dto.application.ApplicationResponseDto;
+import com.example.demo.dto.application.ApplicationGetResponseDto;
+import com.example.demo.dto.application.ApplicationStatusResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +38,11 @@ public class ApplicationService {
         applicationRepository.deleteById(id);
     }
 
-    public List<Application> findByPostId(Long postId) {
+    public List<ApplicationGetResponseDto> findByPostId(Long postId) {
         return applicationRepository.findByPostId(postId)
                 .stream()
                 .filter(application -> application.getStatus() != Application.Status.Rejected)
+                .map(ApplicationGetResponseDto::new)
                 .collect(Collectors.toList());
     }
 
@@ -57,11 +59,11 @@ public class ApplicationService {
         return postOptional.isPresent() && postOptional.get().getUser().getEmail().equals(userEmail);
     }
 
-    public ApplicationResponseDto acceptApplication(Long applicationId, String userEmail) {
+    public ApplicationStatusResponseDto acceptApplication(Long applicationId, String userEmail) {
         Optional<Application> optionalApplication = applicationRepository.findById(applicationId);
 
         if (optionalApplication.isEmpty()) {
-            return new ApplicationResponseDto("Error", "Application not found", null);
+            return new ApplicationStatusResponseDto("Error", "Application not found", null);
         }
 
         Application application = optionalApplication.get();
@@ -69,11 +71,11 @@ public class ApplicationService {
         User author = post.getUser();
 
         if (!author.getEmail().equals(userEmail)) {
-            return new ApplicationResponseDto("Error", "Unauthorized", null);
+            return new ApplicationStatusResponseDto("Error", "Unauthorized", null);
         }
 
         if (application.getStatus() != Status.Requested || !application.isTrade()) {
-            return new ApplicationResponseDto("Error", "Invalid status transition", null);
+            return new ApplicationStatusResponseDto("Error", "Invalid status transition", null);
         }
 
         application.setStatus(Status.Soorack);
@@ -84,7 +86,7 @@ public class ApplicationService {
             contactLink = application.getExchangePost().getContactlink();
         }
 
-        return new ApplicationResponseDto("Soorack","지원이 수락되었습니다.", contactLink);
+        return new ApplicationStatusResponseDto("Soorack","지원이 수락되었습니다.", contactLink);
     }
 
     public String changeApplicationStatus(Long id, String userEmail, Status newStatus, Status... requiredStatuses) {
